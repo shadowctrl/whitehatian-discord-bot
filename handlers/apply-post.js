@@ -343,6 +343,10 @@ module.exports = {
     //Close ticket
     else if (interaction.customId == "close-ticket") {
       const user_id = interaction.user.id;
+      if (!interaction.member.roles.cache.has(client.config.support.meta))
+        return interaction.reply({
+          content: `You dont have proper privilege to close the ticket`,
+        });
 
       const row = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
@@ -581,6 +585,11 @@ module.exports = {
 
     //content published ticket deletion and notifier
     else if (interaction.customId == "delete-ticket") {
+      if (!interaction.member.roles.cache.has(client.config.support.youtube))
+        return interaction.reply({
+          content: `You dont have proper privilege to close the ticket`,
+        });
+
       const modal = new ModalBuilder()
         .setCustomId("delete-ticket-modal")
         .setTitle("Publish Details");
@@ -674,7 +683,8 @@ module.exports = {
                 value: records.social_username,
                 inline: true,
               },
-              { name: "Content url", value: records.content_url, inline: true }
+              { name: "Content url", value: records.content_url, inline: true },
+              { name: "Deleted By", value: `${interaction.member}` }
             )
             .setTimestamp();
 
