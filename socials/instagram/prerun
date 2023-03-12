@@ -1,0 +1,71 @@
+const fs = require("fs");
+require("colors");
+const querystring = require("querystring");
+
+const { Curl } = require("node-libcurl");
+const prompt = require("prompt-sync")({ sigint: true });
+const path = require("path");
+
+const {
+  client_id,
+  client_secret,
+  redirect_uris,
+} = require("../../credentials/instagram/insta_whitehatian.json");
+
+function long_gen(short_token) {
+  const curl_long = new Curl();
+
+  curl_long.setOpt(
+    Curl.option.URL,
+    `https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=${client_secret}&access_token=${short_token}`
+  );
+  curl_long.on("end", function (statusCode, data, headers) {
+    const tokenPath = path.join(__dirname, "long_token.json");
+    fs.writeFileSync(tokenPath, JSON.stringify(JSON.parse(data)));
+    console.log("Long Term Access Token Saved to long_token.json");
+
+    this.close();
+  });
+  curl_long.perform();
+}
+
+function gen() {
+  const redirect_uri = redirect_uris[0];
+  console.log(
+    "Authorize here (Copy paste in browser, don't click to open(ctrl+click)):",
+    `https://api.instagram.com/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=user_profile,user_media&response_type=code`
+  );
+
+  var code = prompt("Enter Authoization Code: ");
+
+  const curlTest = new Curl();
+
+  curlTest.setOpt(
+    Curl.option.URL,
+    "https://api.instagram.com/oauth/access_token"
+  );
+  curlTest.setOpt(Curl.option.POST, true);
+  curlTest.setOpt(
+    Curl.option.POSTFIELDS,
+    querystring.stringify({
+      client_id: `${client_id}`,
+      client_secret: `${client_secret}`,
+      grant_type: "authorization_code",
+      redirect_uri: `${redirect_uri}`,
+      code: `${code}`,
+    })
+  );
+
+  curlTest.on("end", function (statusCode, data, headers) {
+    if (JSON.parse(data).access_token) {
+      const tokenPath = path.join(__dirname, "short_token.json");
+      fs.writeFileSync(tokenPath, JSON.stringify(JSON.parse(data)));
+      console.log("Access Token Saved to short_token.json");
+      long_gen(JSON.parse(data).access_token);
+    } else console.log("Error access token not received: ".bgRed.black, data);
+    this.close();
+  });
+
+  curlTest.perform();
+}
+gen();

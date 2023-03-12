@@ -1,0 +1,39 @@
+{
+  "mailer": {
+    "rakshith": 850358261374255145,
+    "raghav": 758579147009163304
+  },
+  "whitehatians": {
+    "logo": "https://cdn.discordapp.com/attachments/1011978531464548353/1040280169144930365/photo.jpg",
+    "instagram": "https://instagram.com/srmvec_cys_whitehatians"
+  },
+  "socials": {
+    "youtube_channel_id": "UCDOSR0Hh0ZXYmVqLWDQhoqQ",
+    "youtube_videos_cid": "1052203697087729726",
+    "instagram_feed_cid": "1053297730421805126",
+    "insta_posts_apply_cid": 999574693910687764
+  },
+
+  "social_mods": {
+    "mod1": 758579147009163304
+  },
+
+  "categories": {
+    "meta": "1040444092523495486",
+    "meta_closed": "1040444206583390229",
+    "youtube": "1084152582634737804",
+    "youtube_closed": "1068924068629323827"
+  },
+
+  "support": {
+    "meta": "1042041131736764487",
+    "youtube": "1084165444241477833"
+  },
+
+  "logs": {
+    "auth_log": "1041984580443447368",
+    "closed_ticket_log": "1042668502101807104",
+    "deleted_ticket_log": "1042668630749499463",
+    "published_noti_log": "1042457758080958485"
+  }
+}

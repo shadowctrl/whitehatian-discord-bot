@@ -1,0 +1,7 @@
+node_modules
+credentials
+.env
+socials/instagram/long_token.json
+socials/instagram/short_token.json
+others/token.json
+
