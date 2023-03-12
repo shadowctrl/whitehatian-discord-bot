@@ -68,7 +68,7 @@ module.exports = {
         .send({ embeds: [fb_embed] });
 
       await interaction.user.send(
-        `*Thanks for participitating in RootMe - CTF organized by* ***Whitehatians - Department Of Cyber Security, Srmvec***\n || rapelcgvba 13 || `
+        `*Thanks for participating in RootMe - CTF organized by* ***Whitehatians - Department Of Cyber Security, Srmvec***\n || rapelcgvba|| `
       );
     }
 
@@ -82,14 +82,18 @@ module.exports = {
       const insta_id = new TextInputBuilder()
         .setCustomId("insta_id")
         .setLabel("Instagram Username")
-        .setPlaceholder("EX: whitehatians")
+        .setPlaceholder(
+          "THIS IS ONLY FOR OSINT PURPOSE ORIGINAL FORM WOULD BE GIVEN TO YOU AT THE END OF EVENT"
+        )
         .setStyle(TextInputStyle.Short)
         .setRequired(true);
 
       const number = new TextInputBuilder()
         .setCustomId("num")
         .setLabel("Conatct Number")
-        .setPlaceholder("Ex:822xxxxxx0")
+        .setPlaceholder(
+          "THIS IS ONLY FOR OSINT PURPOSE ORIGINAL FORM WOULD BE GIVEN TO YOU AT THE END OF EVENT"
+        )
         .setStyle(TextInputStyle.Short)
         .setRequired(true);
 
@@ -106,7 +110,7 @@ module.exports = {
         ephemeral: true,
       });
       await interaction.user.send(
-        `*Thanks for participitating in RootMe - CTF organized by* ***Whitehatians - Department Of Cyber Security, Srmvec*** `
+        `*Thanks for participating in RootMe - CTF organized by* ***Whitehatians - Department Of Cyber Security, Srmvec*** `
       );
       const cb_row1 = await interaction.fields.getTextInputValue("insta_id");
       const cb_row2 = await interaction.fields.getTextInputValue("num");
@@ -585,7 +589,7 @@ module.exports = {
 
     //content published ticket deletion and notifier
     else if (interaction.customId == "delete-ticket") {
-      if (!interaction.member.roles.cache.has(client.config.support.youtube))
+      if (!interaction.member.roles.cache.has(client.config.support.meta))
         return interaction.reply({
           content: `You dont have proper privilege to close the ticket`,
         });
@@ -924,7 +928,10 @@ module.exports = {
     // -------------------------------------------- Close Ticket -------------------------------------------------
     else if (interaction.customId == "close-ticket-youtube") {
       const user_id = interaction.user.id;
-
+      if (!interaction.member.roles.cache.has(client.config.support.youtube))
+        return interaction.reply({
+          content: `You dont have proper privilege to close the ticket`,
+        });
       const row = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId("confirm-close-youtube")
@@ -1162,6 +1169,10 @@ module.exports = {
     }
     //----------------------------content published ticket deletion and notifier---------------------------
     else if (interaction.customId == "delete-ticket-youtube") {
+      if (!interaction.member.roles.cache.has(client.config.support.youtube))
+        return interaction.reply({
+          content: `You dont have proper privilege to close the ticket`,
+        });
       const modal = new ModalBuilder()
         .setCustomId("delete-ticket-modal-youtube")
         .setTitle("Publish Details");
