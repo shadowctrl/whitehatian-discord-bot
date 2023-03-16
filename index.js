@@ -1,3 +1,5 @@
+const express = require("express");
+const cors = require("cors");
 const fs = require("fs");
 require("dotenv").config();
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
@@ -75,4 +77,20 @@ client.login(Token).catch((err) => {
 //   handle.createrr(client, undefined, undefined, err);
 // });
 
-mongodb.login(client);
+//mongodb.login(client);
+
+// -------------------------------------- Express ---------------------------------------
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("hello");
+});
+
+app.get("/post", (req, res) => {
+  console.log("Connected to React");
+  res.redirect("/");
+});
+const port = 8080;
+app.use(cors());
+app.listen(port, console.log("listening on port 8080"));
