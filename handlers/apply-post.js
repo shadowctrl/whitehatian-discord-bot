@@ -152,7 +152,7 @@ module.exports = {
             .setTitle("Resource Control - Duplicate Ticket")
             .addFields({
               name: "Reason",
-              value: `*You already have a open ticket. kindly close ticket before opening a new ticket.*\n\n**If issue persists contact <@&${client.config.support.youtube}>** `,
+              value: `*You already have a open ticket. kindly close ticket before opening a new ticket.*\n\n**If issue persists contact <@&${client.config.support.meta}>** `,
             })
             .setTimestamp()
             .setColor("Red")
@@ -265,8 +265,19 @@ module.exports = {
                   PermissionFlagsBits.EmbedLinks,
                   PermissionFlagsBits.ReadMessageHistory,
                   PermissionFlagsBits.AddReactions,
+                  PermissionFlagsBits.UseExternalEmojis,
+                  PermissionFlagsBits.UseExternalStickers,
                   PermissionFlagsBits.CreatePublicThreads,
                   PermissionFlagsBits.ManageThreads,
+                ],
+              },
+              {
+                id: client.config.techTeam.incharge,
+                allow: [
+                  PermissionFlagsBits.ViewChannel,
+                  PermissionFlagsBits.AddReactions,
+                  PermissionFlagsBits.UseExternalEmojis,
+                  PermissionFlagsBits.UseExternalStickers,
                 ],
               },
               {
@@ -435,7 +446,7 @@ module.exports = {
 
             await interaction.channel.permissionOverwrites.edit(
               records.user_id,
-              { ViewChannel: false }
+              { ViewChannel: null }
             );
             //prettier-ignore
             await interaction.channel.edit({
@@ -591,7 +602,7 @@ module.exports = {
     else if (interaction.customId == "delete-ticket") {
       if (!interaction.member.roles.cache.has(client.config.support.meta))
         return interaction.reply({
-          content: `You dont have proper privilege to close the ticket`,
+          content: `You dont have proper privilege to delete the ticket`,
         });
 
       const modal = new ModalBuilder()
@@ -721,7 +732,7 @@ module.exports = {
             .setTitle("Resource Control - Duplicate Ticket")
             .addFields({
               name: "Reason",
-              value: `*You already have a open ticket. kindly close ticket before opening a new ticket.*\n\n**If issue persists contact <@&${client.config.support.meta}>** `,
+              value: `*You already have a open ticket. kindly close ticket before opening a new ticket.*\n\n**If issue persists contact <@&${client.config.support.youtube}>** `,
             })
             .setTimestamp()
             .setColor("Red")
@@ -1015,7 +1026,7 @@ module.exports = {
 
             await interaction.channel.permissionOverwrites.edit(
               records.user_id,
-              { ViewChannel: false }
+              { ViewChannel: null }
             );
             //prettier-ignore
             await interaction.channel.edit({
