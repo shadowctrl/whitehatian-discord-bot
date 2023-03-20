@@ -6,7 +6,7 @@ const details = new Schema({
   user_ticket_no: Number,
   ticket_status: String,
   platform: String,
-  channel_id: Number,
+  channel_id: String,
   message_id: String,
   name: String,
   dept: String,

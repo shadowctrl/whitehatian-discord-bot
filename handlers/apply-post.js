@@ -331,7 +331,6 @@ module.exports = {
               embeds: [embed],
               components: [row],
             });
-
             db2.findOne(
               { guild_id: interaction.guild.id },
               async (err, records) => {
@@ -339,7 +338,7 @@ module.exports = {
                   user_id: user_id,
                   user_ticket_no: records.global_ticket_no,
                   ticket_status: "open",
-                  channel_id: c.id,
+                  channel_id: c.id.toString(),
                   message_id: message.id,
                   name: res_name,
                   dept: res_dept,
@@ -387,7 +386,7 @@ module.exports = {
 
       collector.on("collect", async (i) => {
         if (i.customId == "confirm-close") {
-          var chn_id = i.channel.id;
+          var chn_id = i.channel.id.toString();
           chn_id = chn_id;
 
           //db.findOne({channel_id:chn_id},async (err,records) => console.log(records));
@@ -539,7 +538,7 @@ module.exports = {
       );
 
       db3.findOne(
-        { channel_id: interaction.channel.id },
+        { channel_id: interaction.channel.id.toString() },
         async (err, records) => {
           const cancel_delete_embed = new EmbedBuilder()
             .setColor("Red")
@@ -591,7 +590,7 @@ module.exports = {
 
           setTimeout(async () => {
             await db3.findOneAndDelete({
-              channel_id: interaction.channel.id,
+              channel_id: interaction.channel.id.toString(),
             });
             await interaction.channel.delete();
             await del_ticket_logs.send({ embeds: [cancel_delete_embed] });
@@ -636,7 +635,7 @@ module.exports = {
       const secondary_url = await interaction.fields.getTextInputValue("url2");
 
       db3.findOne(
-        { channel_id: interaction.channel.id },
+        { channel_id: interaction.channel.id.toString() },
         async (err, records) => {
           const del_ticket_det = new db4({
             user_id: records.user_id,
@@ -679,7 +678,7 @@ module.exports = {
       );
 
       db4.findOne(
-        { channel_id: interaction.channel.id },
+        { channel_id: interaction.channel.id.toString() },
         async (err, records) => {
           const del_log_embed = new EmbedBuilder()
             .setTitle(`Deleted Ticket - ${records.user_ticket_no} `)
@@ -707,7 +706,7 @@ module.exports = {
 
           setTimeout(async () => {
             await db3.findOneAndDelete({
-              channel_id: interaction.channel.id,
+              channel_id: interaction.channel.id.toString(),
             });
             await interaction.channel.delete();
             await del_ticket_logs.send({ embeds: [del_log_embed] });
@@ -923,7 +922,7 @@ module.exports = {
                   user_id: user_id,
                   user_ticket_no: records.global_ticket_no,
                   ticket_status: "open",
-                  channel_id: c.id,
+                  channel_id: c.id.toString(),
                   message_id: message.id,
                   name: res_name,
                   dept: res_dept,
@@ -971,7 +970,7 @@ module.exports = {
 
       collector.on("collect", async (i) => {
         if (i.customId == "confirm-close-youtube") {
-          var chn_id = i.channel.id;
+          var chn_id = i.channel.id.toString();
           chn_id = chn_id;
 
           //db.findOne({channel_id:chn_id},async (err,records) => console.log(records));
@@ -1124,7 +1123,7 @@ module.exports = {
       );
 
       db3.findOne(
-        { channel_id: interaction.channel.id },
+        { channel_id: interaction.channel.id.toString() },
         async (err, records) => {
           const cancel_delete_embed = new EmbedBuilder()
             .setColor("Red")
@@ -1175,7 +1174,9 @@ module.exports = {
           await interaction.reply({ embeds: [res_embed] });
 
           setTimeout(async () => {
-            await db3.findOneAndDelete({ channel_id: interaction.channel.id });
+            await db3.findOneAndDelete({
+              channel_id: interaction.channel.id.toString(),
+            });
             await interaction.channel.delete();
             await del_ticket_logs.send({ embeds: [cancel_delete_embed] });
           }, 5000);
@@ -1217,7 +1218,7 @@ module.exports = {
       const secondary_url = await interaction.fields.getTextInputValue("url2");
 
       db3.findOne(
-        { channel_id: interaction.channel.id },
+        { channel_id: interaction.channel.id.toString() },
         async (err, records) => {
           const del_ticket_det = new db4({
             user_id: records.user_id,
@@ -1260,7 +1261,7 @@ module.exports = {
       );
 
       db4.findOne(
-        { channel_id: interaction.channel.id },
+        { channel_id: interaction.channel.id.toString() },
         async (err, records) => {
           const del_log_embed = new EmbedBuilder()
             .setTitle(`Deleted Ticket - ${records.user_ticket_no} `)
@@ -1286,7 +1287,9 @@ module.exports = {
             .setTimestamp();
 
           setTimeout(async () => {
-            await db3.findOneAndDelete({ channel_id: interaction.channel.id });
+            await db3.findOneAndDelete({
+              channel_id: interaction.channel.id.toString(),
+            });
             await interaction.channel.delete();
             await del_ticket_logs.send({ embeds: [del_log_embed] });
             await pub_content_logs.send(
