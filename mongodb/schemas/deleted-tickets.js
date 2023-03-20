@@ -4,7 +4,7 @@ const details = new Schema({
   user_id: String,
   user_ticket_no: Number,
   ticket_status: String,
-  channel_id: String,
+  channel_id: Number,
   message_id: String,
   name: String,
   dept: String,

@@ -138,7 +138,6 @@ module.exports = {
 
     if (interaction.customId == "apply-instagram") {
       var user = interaction.user;
-      console.log("inside");
       var user_id = interaction.user.id;
 
       //Repeated Ticket Violation Checker
@@ -278,6 +277,7 @@ module.exports = {
                   PermissionFlagsBits.AddReactions,
                   PermissionFlagsBits.UseExternalEmojis,
                   PermissionFlagsBits.UseExternalStickers,
+                  PermissionFlagsBits.ReadMessageHistory,
                 ],
               },
               {
@@ -388,7 +388,7 @@ module.exports = {
       collector.on("collect", async (i) => {
         if (i.customId == "confirm-close") {
           var chn_id = i.channel.id;
-          chn_id = chn_id.toString();
+          chn_id = chn_id;
 
           //db.findOne({channel_id:chn_id},async (err,records) => console.log(records));
           db.findOne({ channel_id: chn_id }, async (err, records) => {
@@ -590,7 +590,9 @@ module.exports = {
           await interaction.reply({ embeds: [res_embed] });
 
           setTimeout(async () => {
-            await db3.findOneAndDelete({ channel_id: interaction.channel.id });
+            await db3.findOneAndDelete({
+              channel_id: interaction.channel.id,
+            });
             await interaction.channel.delete();
             await del_ticket_logs.send({ embeds: [cancel_delete_embed] });
           }, 5000);
@@ -704,7 +706,9 @@ module.exports = {
             .setTimestamp();
 
           setTimeout(async () => {
-            await db3.findOneAndDelete({ channel_id: interaction.channel.id });
+            await db3.findOneAndDelete({
+              channel_id: interaction.channel.id,
+            });
             await interaction.channel.delete();
             await del_ticket_logs.send({ embeds: [del_log_embed] });
             await pub_content_logs.send(
@@ -968,7 +972,7 @@ module.exports = {
       collector.on("collect", async (i) => {
         if (i.customId == "confirm-close-youtube") {
           var chn_id = i.channel.id;
-          chn_id = chn_id.toString();
+          chn_id = chn_id;
 
           //db.findOne({channel_id:chn_id},async (err,records) => console.log(records));
           db.findOne({ channel_id: chn_id }, async (err, records) => {
