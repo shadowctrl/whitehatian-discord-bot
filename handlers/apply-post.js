@@ -490,7 +490,7 @@ module.exports = {
               embeds: [embed],
               components: [del_row],
             });
-            await db.findOneAndDelete({ user_id: user_id });
+            await db.findOneAndDelete({ channel_id: chn_id });
           });
           collector.stop();
         }
@@ -1074,7 +1074,7 @@ module.exports = {
               embeds: [embed],
               components: [del_row],
             });
-            await db.findOneAndDelete({ user_id: user_id });
+            await db.findOneAndDelete({ channel_id: chn_id });
           });
           collector.stop();
         }
