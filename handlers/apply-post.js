@@ -490,6 +490,11 @@ module.exports = {
               embeds: [embed],
               components: [del_row],
             });
+            await client.users.cache
+              .get(records.user_id)
+              .send(
+                `*Ticket* ***#${records.user_ticket_no}*** *has been closed by the Meta Support Team.*\t*For help and queries approach* ***socials-help-desk***  *in the WhiteHatians Discord Server* `
+              );
             await db.findOneAndDelete({ channel_id: chn_id });
           });
           collector.stop();
@@ -1074,6 +1079,11 @@ module.exports = {
               embeds: [embed],
               components: [del_row],
             });
+            await client.users.cache
+              .get(records.user_id)
+              .send(
+                `*Ticket* ***#${records.user_ticket_no}*** *has been closed by the Youtube Support Team.*\t*For help and queries approach* ***socials-help-desk***  *in the WhiteHatians Discord Server* `
+              );
             await db.findOneAndDelete({ channel_id: chn_id });
           });
           collector.stop();
@@ -1143,7 +1153,8 @@ module.exports = {
                 value: records.social_username,
                 inline: true,
               },
-              { name: "Content url", value: records.content_url, inline: true }
+              { name: "Content url", value: records.content_url, inline: true },
+              { name: "Deleted By", value: `${interaction.member}` }
             )
             .setTimestamp();
 
