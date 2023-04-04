@@ -43,6 +43,7 @@ fs.readdirSync("./events").filter((dir) => {
   let files = fs
     .readdirSync(`./events/${dir}`)
     .filter((file) => file.endsWith(".js"));
+
   for (let file of files) {
     const event = require(`./events/${dir}/${file}`);
     client.on(event.name, (...args) => {
@@ -81,16 +82,16 @@ mongodb.login(client);
 
 // -------------------------------------- Express ---------------------------------------
 
-// const app = express();
+const app = express();
 
-// app.get("/", (req, res) => {
-//   res.send("hello");
-// });
+app.get("/", (req, res) => {
+  res.send("hello");
+});
 
-// app.get("/post", (req, res) => {
-//   console.log("Connected to React");
-//   res.redirect("/");
-// });
-// const port = 8080;
-// app.use(cors());
-// app.listen(port, console.log("listening on port 8080"));
+app.get("/post", (req, res) => {
+  console.log("Connected to React");
+  res.redirect("/");
+});
+const port = 8080;
+app.use(cors());
+app.listen(port, console.log("listening on port 8080"));
