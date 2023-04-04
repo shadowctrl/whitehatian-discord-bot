@@ -13,7 +13,6 @@ module.exports = {
         await command.execute(interaction, client);
       }
     }
-
     if (!interaction.isChatInputCommand()) {
       apply_post.execute(interaction, client);
       //   const tickets = fs
