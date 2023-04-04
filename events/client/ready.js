@@ -1,13 +1,27 @@
 var colors = require("colors");
 
-const { EmbedBuilder, ActivityType } = require("discord.js");
+const { EmbedBuilder, ActivityType, Embed } = require("discord.js");
 const fs = require("fs");
+const internal = require("stream");
 const deploy = require("../../deploy.js");
 
 module.exports = {
   name: "ready",
   async execute(client) {
     console.log(`${client.user.tag} Ready to go.`.bgWhite.italic.bold.black);
+
+    const embed = new EmbedBuilder()
+      .setColor("Orange")
+      .setTitle("Bot Restart Completed")
+      .setFooter({
+        text: "Whitehatians",
+        iconURL: client.config.whitehatians.logo,
+      })
+      .setTimestamp();
+
+    await client.channels.cache
+      .get(client.config.logs.start_log)
+      .send({ embeds: [embed] });
     //client.user.setStatus("dnd");
 
     fs.readdirSync(`./socials`).filter((dir) => {
