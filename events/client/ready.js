@@ -19,9 +19,9 @@ module.exports = {
       })
       .setTimestamp();
 
-    await client.channels.cache
-      .get(client.config.logs.start_log)
-      .send({ embeds: [embed] });
+    // await client.channels.cache
+    //   .get(client.config.logs.start_log)
+    //   .send({ embeds: [embed] });
     //client.user.setStatus("dnd");
 
     fs.readdirSync(`./socials`).filter((dir) => {

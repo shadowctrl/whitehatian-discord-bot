@@ -17,6 +17,7 @@ const db2 = require("../mongodb/schemas/global_ticket_no.js");
 const db3 = require("../mongodb/schemas/closed-tickets.js");
 const db4 = require("../mongodb/schemas/deleted-tickets.js");
 const db5 = require("../mongodb/schemas/non-publish-tickets.js");
+const log = require("./logs/error.js");
 
 module.exports = {
   name: "interactionCreate",
@@ -404,14 +405,17 @@ module.exports = {
               content_url: records.content_url,
             });
             await close_ticket_details.save();
-
-            //console.log("after db save")
-            //edit ticket close message
             await interaction.channel.messages
               .fetch(`${records.message_id}`)
               .then((res) => {
                 res.edit({ components: [] });
+              })
+              .catch((err) => {
+                log.error(client, interaction, "On confirm close ln 397", err);
               });
+
+            //console.log("after db save")
+            //edit ticket close message
 
             //disable close and cancel buttons
             row.components[0].setDisabled(true);
@@ -496,7 +500,10 @@ module.exports = {
                 `*Ticket* ***#${records.user_ticket_no}*** *has been closed by the Meta Support Team.*\t*For help and queries approach* ***socials-help-desk***  *in the WhiteHatians Discord Server* `
               );
             await db.findOneAndDelete({ channel_id: chn_id });
-          });
+          })
+//.catch((err) => {
+  //          log.error(client, interaction, "ln 505-apply-post", err);
+    //      });
           collector.stop();
         }
 
@@ -1293,7 +1300,8 @@ module.exports = {
                 value: records.social_username,
                 inline: true,
               },
-              { name: "Content url", value: records.content_url, inline: true }
+              { name: "Content url", value: records.content_url, inline: true },
+              { name: "Deleted By", value: `${interaction.member}` }
             )
             .setTimestamp();
 

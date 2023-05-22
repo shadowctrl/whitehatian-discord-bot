@@ -6,16 +6,18 @@ const {
   ButtonBuilder,
   ButtonStyle,
 } = require("discord.js");
-var request = require("request");
 
+const { Curl } = require("node-libcurl");
 function auth(token, client) {
   console.log("Instagram Authenticated Successfully!".bgYellow);
   setInterval(() => {
-    var options = {
-      url: `https://graph.instagram.com/me/media?fields=media_url,permalink,caption&limit=1&access_token=${token.access_token}`,
-    };
+    const curl = new Curl();
 
-    function callback(error, response, data) {
+    curl.setOpt(
+      Curl.option.URL,
+      `https://graph.instagram.com/me/media?fields=media_url,permalink,caption&limit=1&access_token=${token.access_token}`
+    );
+    curl.on("end", function (response, data) {
       if (data.error) console.log("Error in instagram api", data);
       const media = JSON.parse(data).data[0].media_url;
       const feed = JSON.parse(data).data[0].permalink;
@@ -50,12 +52,10 @@ function auth(token, client) {
           fs.writeFileSync("./db/instagram_feed_ids.txt", feed);
         }
       }
-    }
-
-    request(options, callback);
+    });
+    curl.perform();
   }, 3000);
 }
-
 module.exports = {
   main(client) {
     const token = fs.readFileSync("./socials/instagram/long_token.json");

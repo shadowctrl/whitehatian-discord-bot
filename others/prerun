@@ -1,25 +1,30 @@
-const {google}=require('googleapis');
-const gmail_cred=require('../credentials/google/gmail_whitehatian.json');
-const gmail_scope = ['https://www.googleapis.com/auth/gmail.send'];
+//Gmail Prerun
+const { google } = require("googleapis");
+const gmail_cred = require("../credentials/google/gmail_whitehatian.json");
+const gmail_scope = ["https://www.googleapis.com/auth/gmail.send"];
 //const tokens = require('./token.json');
 
-const path = require('path');
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 const prompt = require("prompt-sync")({ sigint: true });
 
-const oauth2= new google.auth.OAuth2(gmail_cred.installed.client_id, gmail_cred.installed.client_secret, gmail_cred.installed.redirect_uris[0] );
+const oauth2 = new google.auth.OAuth2(
+  gmail_cred.installed.client_id,
+  gmail_cred.installed.client_secret,
+  gmail_cred.installed.redirect_uris[0]
+);
 const url = oauth2.generateAuthUrl({
-    access_type:'offline',
-    prompt:'consent',
-    scope: gmail_scope,
+  access_type: "offline",
+  prompt: "consent",
+  scope: gmail_scope,
 });
 
-console.log("Authorize here:",url);
+console.log("Authorize here:", url);
 
-var code=prompt("Enter browser generated code here: ")
+var code = prompt("Enter browser generated code here: ");
 
 oauth2.getToken(code).then(({ tokens }) => {
-    const tokenPath = path.join(__dirname, 'token.json');
-    fs.writeFileSync(tokenPath, JSON.stringify(tokens));
-    console.log('Access token and refresh token stored to token.json');
-  });
+  const tokenPath = path.join(__dirname, "token.json");
+  fs.writeFileSync(tokenPath, JSON.stringify(tokens));
+  console.log("Access token and refresh token stored to token.json");
+});

@@ -54,6 +54,8 @@
 
     "querystring": "^0.2.1",
 
+    "request": "^2.88.2",
+
     "youtube-api": "^3.0.1"
 
   }
