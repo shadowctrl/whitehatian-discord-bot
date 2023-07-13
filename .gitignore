@@ -4,4 +4,8 @@ credentials
 socials/instagram/long_token.json
 socials/instagram/short_token.json
 others/token.json
+others/mail_attachments/
+.vscode/
+test*
+db/
 

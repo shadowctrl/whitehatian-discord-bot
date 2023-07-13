@@ -1,6 +1,6 @@
 const { google } = require("googleapis");
 
-const gmail_cred = require("../credentials/google/gmail_ngtca.json");
+const gmail_cred = require("../credentials/google/gmail_whitehatian.json");
 const { client_secret, client_id, redirect_uris } = gmail_cred.installed;
 
 const tokens = require("./token.json");

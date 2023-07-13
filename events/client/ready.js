@@ -8,6 +8,7 @@ const deploy = require("../../deploy.js");
 module.exports = {
   name: "ready",
   async execute(client) {
+    console.log("inside");
     console.log(`${client.user.tag} Ready to go.`.bgWhite.italic.bold.black);
 
     const embed = new EmbedBuilder()
@@ -19,10 +20,10 @@ module.exports = {
       })
       .setTimestamp();
 
-    // await client.channels.cache
-    //   .get(client.config.logs.start_log)
-    //   .send({ embeds: [embed] });
-    //client.user.setStatus("dnd");
+    await client.channels.cache
+      .get(client.config.logs.start_log)
+      .send({ embeds: [embed] });
+    client.user.setStatus("dnd");
 
     fs.readdirSync(`./socials`).filter((dir) => {
       var files = fs
@@ -33,10 +34,6 @@ module.exports = {
         social.main(client);
       }
     });
-
-    //Err
-    //const err_chanid = client.config.ERR_LOG.CHAN_ID
-    //const err_logchan = client.channels.cache.get(err_chanid);
 
     const activities = [
       { name: `The Cyberspace 👀`, type: ActivityType.Watching },
