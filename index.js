@@ -47,6 +47,6 @@ client.login(Token).catch((err) => {
   return process.exit();
 }); //Client Logon
 
-mongodb.login(client); //mongoDB Logon
+// mongodb.login(client); //mongoDB Logon
 
 module.exports = client;

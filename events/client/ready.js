@@ -20,10 +20,9 @@ module.exports = {
       })
       .setTimestamp();
 
-    await client.channels.cache
-      .get(client.config.logs.start_log)
-      .send({ embeds: [embed] });
-    client.user.setStatus("dnd");
+    // await client.channels.cache
+    //   .get(client.config.logs.start_log)
+    //   .send({ embeds: [embed] });
 
     fs.readdirSync(`./socials`).filter((dir) => {
       var files = fs
@@ -31,7 +30,7 @@ module.exports = {
         .filter((file) => file.endsWith(".js"));
       for (let x of files) {
         const social = require(`../../socials/${dir}/${x}`);
-        social.main(client);
+        // social.main(client);
       }
     });
 
