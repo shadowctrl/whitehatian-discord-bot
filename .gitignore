@@ -7,4 +7,5 @@ others/token.json
 others/mail_attachments/
 .vscode/
 test*
+db/
 
