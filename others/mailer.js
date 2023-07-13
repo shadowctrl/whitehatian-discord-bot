@@ -84,7 +84,7 @@ SRM Valliammai Engineering Collge.`,
             }
           }
         }
-      });
+      })
+      .then((msgid) => console.log("All mails sent"));
   },
 };
-//.then((msgid) => console.log("All mails sent"));
