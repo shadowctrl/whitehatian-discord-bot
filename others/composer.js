@@ -37,7 +37,7 @@ async function create_mail(options) {
 
 async function send_mail(options) {
   const gmail = await get_gmail();
-  const msg = await create_mail(options);
+  const msg = await create_mail(options).catch((err) => console.log(err));
   const { data: { id } = {} } = await gmail.users.messages.send({
     userId: "me",
     resource: { raw: msg },

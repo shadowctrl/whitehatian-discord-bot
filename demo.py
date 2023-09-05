@@ -3,14 +3,7 @@ import numpy as np
 import pandas as pd
 import nltk
 from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.layers import (
-    Input,
-    Embedding,
-    LSTM,
-    Dense,
-    GlobalMaxPooling1D,
-    Flatten,
-)
+from tensorflow.keras.layers import Input, Embedding, LSTM, Dense, GlobalMaxPooling1D, Flatten
 from tensorflow.keras.models import Model
 import matplotlib.pyplot as plt
 import string
@@ -19,40 +12,39 @@ import pickle
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.preprocessing import LabelEncoder
 import random
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from tensorflow.keras.preprocessing.text import tokenizer_from_json
 
 # Load the intents data from the JSON file
-with open("content.json") as content:
+with open('content.json') as content:
     data = json.load(content)
 
 # Get all the data into lists
 tags = []
 inputs = []
 responses = {}
-for intent in data["intents"]:
-    responses[intent["tag"]] = intent["responses"]
-    for line in intent["input"]:
+for intent in data['intents']:
+    responses[intent['tag']] = intent['responses']
+    for line in intent['input']:
         inputs.append(line)
-        tags.append(intent["tag"])
+        tags.append(intent['tag'])
 
 # Convert to DataFrame
 data_df = pd.DataFrame({"inputs": inputs, "tags": tags})
 
 # Preprocessing
-data_df["inputs"] = data_df["inputs"].apply(
-    lambda wrd: [ltrs.lower() for ltrs in wrd if ltrs not in string.punctuation]
-)
-data_df["inputs"] = data_df["inputs"].apply(lambda wrd: "".join(wrd))
+data_df['inputs'] = data_df['inputs'].apply(lambda wrd: [ltrs.lower() for ltrs in wrd if ltrs not in string.punctuation])
+data_df['inputs'] = data_df['inputs'].apply(lambda wrd: ''.join(wrd))
 
 # Tokenization and Padding
 tokenizer = Tokenizer(num_words=2000)
-tokenizer.fit_on_texts(data_df["inputs"])
-train = tokenizer.texts_to_sequences(data_df["inputs"])
+tokenizer.fit_on_texts(data_df['inputs'])
+train = tokenizer.texts_to_sequences(data_df['inputs'])
 x_train = pad_sequences(train)
 
 # Encoding the outputs
 le = LabelEncoder()
-y_train = le.fit_transform(data_df["tags"])
+y_train = le.fit_transform(data_df['tags'])
 
 input_shape = x_train.shape[1]
 vocabulary = len(tokenizer.word_index)
@@ -67,39 +59,39 @@ x = Dense(output_length, activation="softmax")(x)
 model = Model(i, x)
 
 # Compiling the model
-model.compile(
-    loss="sparse_categorical_crossentropy", optimizer="adam", metrics=["accuracy"]
-)
+model.compile(loss="sparse_categorical_crossentropy", optimizer='adam', metrics=['accuracy'])
 
 # Training the model
 model.fit(x_train, y_train, epochs=200)
 
 # Save the tokenizer and model
-tokenizer_path = "tokenizer.pkl"
-model_path = "model.h5"
-tokenizer.save_pretrained(tokenizer_path)
+tokenizer_path = 'tokenizer.json'
+with open(tokenizer_path, 'w') as tokenizer_file:
+    tokenizer_file.write(tokenizer.to_json())
+
+# Save the model
+model_path = 'model.h5'
 model.save(model_path)
 
 # Load the saved tokenizer and model
-tokenizer = Tokenizer()
-tokenizer = tokenizer.from_config(pickle.load(open(tokenizer_path, "rb")))
+with open(tokenizer_path, 'r') as tokenizer_file:
+    tokenizer_json = tokenizer_file.read()
+    tokenizer = tokenizer_from_json(tokenizer_json)
+
 model = tf.keras.models.load_model(model_path)
 
 # Flask App
 app = Flask(__name__)
 
-
-@app.route("/request", methods=["POST"])
+@app.route('/request', methods=['POST'])
 def chatbot():
-    data = request.get_json()["message"]
+    data = request.get_json()['message']
     texts_p = []
     texts_p.extend(data)
 
     # Preprocess the input text
-    prediction_input = [
-        letters.lower() for letters in texts_p if letters not in string.punctuation
-    ]
-    prediction_input = "".join(prediction_input)
+    prediction_input = [letters.lower() for letters in texts_p if letters not in string.punctuation]
+    prediction_input = ''.join(prediction_input)
 
     # Tokenize and pad the input
     prediction_input = tokenizer.texts_to_sequences([prediction_input])
@@ -114,8 +106,8 @@ def chatbot():
     response_tag = le.inverse_transform([output])[0]
     response = random.choice(responses[response_tag])
 
+    # Return the response as JSON
     return response
 
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host='0.0.0.0', port=5000)
