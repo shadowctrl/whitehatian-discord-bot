@@ -34,20 +34,18 @@ module.exports = {
           })
         );
     }
-    const userId = interaction.options.getUser("target").id;
+    const user = interaction.options.getUser("target");
     const embed = new EmbedBuilder()
-      .setTitle(
-        `Contribution Details - ${interaction.user.username} A.K.B (${interaction.user.id})`
-      )
+      .setTitle(`Contribution Details - ${user.username} A.K.B (${user.id})`)
       .setColor("Yellow");
     //await interaction.deferReply();
     //await interaction.user.editreply("Checking Published Tickets");
-    await db.find({ user_id: userId }).then(async (data) => {
+    await db.find({ user_id: user.id }).then(async (data) => {
       embed.addFields({ name: "Published Tickets", value: `${data.length}` });
     });
 
     //await interaction.user.editreply("Checking Non Published Tickets");
-    await db3.find({ user_id: userId }).then(async (data) => {
+    await db3.find({ user_id: user.id }).then(async (data) => {
       embed.addFields({
         name: "Non Published Tickets",
         value: `${data.length}`,
@@ -55,12 +53,12 @@ module.exports = {
     });
 
     //await interaction.user.editreply("Checking Closed Tickets");
-    await db2.find({ user_id: userId }).then(async (data) => {
+    await db2.find({ user_id: user.id }).then(async (data) => {
       embed.addFields({ name: "Closed Tickets", value: `${data.length}` });
     });
 
     // await interaction.user.editreply("Checking Open Tickets");
-    await db4.find({ user_id: userId }).then(async (data) => {
+    await db4.find({ user_id: user.id }).then(async (data) => {
       embed.addFields({ name: "Open Tickets", value: `${data.length}` });
     });
 

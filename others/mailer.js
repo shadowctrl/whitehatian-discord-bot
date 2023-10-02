@@ -1,6 +1,7 @@
 const { google } = require("googleapis");
 const path = require("path");
 const fs = require("fs");
+
 const colors = require("colors");
 const cred = require("../credentials/google/apikeys.json");
 const send_mail = require("./composer.js");
@@ -20,91 +21,78 @@ module.exports = {
       })
       .then(async (res) => {
         var mail_ids = res.data.values[0];
-        // var names = res.data.values[1];
-        await interaction.reply(`***Found ${mail_ids.length} Entries***`);
+        var names = res.data.values[1];
+        await interaction.reply(`***Found ${names.length} Entries***`);
 
-        for (let i = 0; i < mail_ids.length; i++) {
-          // const files = fs
-          //   .readdirSync("./others/mail_attachments")
-          //   .filter((f) => f.endsWith(".jpg"));
-          // for (let a of files) {
-          // var act_name = path.parse(a).name;
-          // act_name = act_name.toLowerCase().split(" ").join(""); //file name
-          // s_name = names[i].toLowerCase().split(" ").join(""); //sheets name
-          // if (act_name == s_name) {
-          // console.log("Matched name".bgGreen, act_name, s_name);
-          // console.log(
-          // `Mail id: ${mail_ids[i]}, Name: ${names[i].toLowerCase()} `
-          // );
-          console.log(`Mail id: ${mail_ids[i]} `);
+        for (let i = 0; i < names.length; i++) {
+          const files = fs
+            .readdirSync("./others/mail_attachments")
+            .filter((f) => f.endsWith(".pdf"));
+          for (let a of files) {
+            var act_name = path.parse(a).name;
+            act_name = act_name.toLowerCase().split(" ").join(""); //file name
+            s_name = names[i].toLowerCase().split(" ").join(""); //sheets name
+            if (act_name == s_name) {
+              console.log("Matched name".bgGreen, act_name, s_name);
+              console.log(
+                `Mail id: ${mail_ids[i]}, Name: ${names[i].toLowerCase()} `
+              );
 
-          const attachments = [
-            {
-              filename: "Invitation.jpeg",
-              path: `./others/mail_attachments/poster.jpeg`,
-            },
-          ];
+              const attachments = [
+                {
+                  filename: "Certificate of Participation.pdf",
+                  path: `./others/mail_attachments/${a}`,
+                },
+              ];
 
-          const options = {
-            to: `${mail_ids[i]}`,
-            subject: `Payment Acknowlegement - Hack-A-Tank `,
-            html: `
-              <html>
-                <body>
-                  <p>
-                    Dear Participant,
-                    <br />
-                    <br />
-                    We acknowlege the payment of Rs.999 towards
-                    "<strong>Hack-A-Tank</strong>", scheduled for 8th September and 9th
-                    September. Your payment has been received and processed. You
-                    are officially registered, and we look forward to your
-                    participation. 
-                    <br /> <br />
-                    <strong>Get ready to hack and innovate!</strong>
-                    <br />
-                    <br />
-                    🚦We wanted to share the social media profiles for our cyber
-                    club with you. Our club is dedicated to exploring the world
-                    of cybersecurity, and we post regular updates and resources
-                    on our social media pages.
-                    <br /> <br />
-                    🔖Instagram - https://instagram.com/whitehatians
-                    <br />
-                    🔖 LinkedIn - https://linkedin.com/company/whitehatians
-                    <br />
-                    🔖Discord - https://discord.gg/Qkjrhegdx5
-                    <br />
-                    🔖YouTube - https://youtube.com/@whitehatians
-                    <br />
-                    🔖Facebook - https://facebook.com/whitehatians
-                    <br />
-                    <br />
-                    Best Regards, <br />
-                    Team Hack-A-Tank,
-                    <br />
-                    Srmvec.
-                  </p>
-                </body>
-              </html>
-            `,
-            // attachments: attachments,
-            textEncoding: "base64",
-            headers: [
-              {
-                key: "X-Application-Developer",
-                value: "https://www.shadowctrl.me",
-              },
-              { key: "X-Application-Version", value: "v1.0" },
-            ],
-          };
-          const msg_id = await send_mail(options, interaction).catch((err) =>
-            console.log(err)
-          );
+              const options = {
+                to: `${mail_ids[i]}`,
+                subject: ` E-Certificate for Hack-a-Tank - National Level 24-Level Hackathon`,
+                html: (
+                  <html>
+                    <body>
+                      Dear Participant,
+                      <br /> <br />
+                      We are delighted to present you with your well-deserved
+                      E-Certificate for participating in Hack-a-Tank, the
+                      National Level 24-Level Hackathon!
+                      <br /> <br />
+                      <strong>Hack-a-Tank</strong> has been an exhilarating
+                      journey of innovation, problem-solving, and technical
+                      excellence, and your active involvement and dedication
+                      have truly shone throughout the competition. As a
+                      testament to your outstanding efforts and token of our
+                      appreciation, we are pleased to present you with the
+                      official E-certificate of participation. Please find the
+                      E-certificate attached to this email.
+                      <br /> <br />
+                      If you have any questions or require any further
+                      information, please feel free to reach out to us by
+                      replying to this mail.
+                      <strong>
+                        Thank you for being a part of the National Level 24-hour
+                        Hackathon on occasion of celebrating 25th year of
+                        SRMVEC, and we wish you every success in your future
+                        endeavors.
+                      </strong>
+                    </body>
+                  </html>
+                ),
 
-          // }
+                attachments: attachments,
+                textEncoding: "base64",
+                headers: [
+                  {
+                    key: "X-Application-Developer",
+                    value: "https://www.shadowctrl.me",
+                  },
+                  { key: "X-Application-Version", value: "v1.0" },
+                ],
+              };
+              const msg_id = await send_mail(options, interaction);
+            }
+          }
         }
-        // }
       })
       .then((msgid) => console.log("All mails sent"));
   },
